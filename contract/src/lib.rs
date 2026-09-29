@@ -31,6 +31,8 @@ pub enum RegistryError {
     InvalidEndpoint = 10,
     InvalidCategory = 11,
     ServiceCounterNotFound = 12,
+    ServiceCountOverflow = 13,
+    ServiceCountStorageMissing = 14,
 }
 
 // Canonical category list. Keep in sync with `frontend/lib/categoryMeta.tsx`.

@@ -9,7 +9,7 @@ import {
 
 describe('registry contract error mapping', () => {
   it('documents every registry contract error code', () => {
-    expect(Object.keys(REGISTRY_ERROR_CODES).map(Number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+    expect(Object.keys(REGISTRY_ERROR_CODES).map(Number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
   });
 
   it('maps numeric registry codes to API ContractError objects', () => {
@@ -23,12 +23,12 @@ describe('registry contract error mapping', () => {
 
   it('maps the get_service_count failure causes to distinct variants', () => {
     const expected = [
-      [12, 'SERVICE_COUNT_OVERVIEW', 'Service count exceeds the maximum supported value'],
-      [13, 'SERVICE_COUNT_STORAGE_CORRUPTED', 'Service count storage is corrupted'],
+      [16, 'SERVICE_COUNT_OVERVIEW', 'Service count exceeds the maximum supported value'],
+      [17, 'SERVICE_COUNT_STORAGE_CORRUPTED', 'Service count storage is corrupted'],
     ];
 
     for (const [code, name, message] of expected) {
-      expect(REGISTRY_ERROR_CODES[code]).toMatchObject({ name, message });
+      expect(REGISTRY_ERROR_CODES[code]).toMatchObject({ code: name, message });
       expect(registryErrorFromCode(code)).toMatchObject({
         name: 'ContractError',
         code: name,
@@ -49,13 +49,13 @@ describe('registry contract error mapping', () => {
   });
 
   it('extracts the get_service_count failure variants from host errors', () => {
-    expect(registryErrorFromHostError({ contractCode: 12 })).toMatchObject({
+    expect(registryErrorFromHostError({ contractCode: 16 })).toMatchObject({
       code: 'SERVICE_COUNT_OVERVIEW',
-      registryErrorCode: 12,
+      registryErrorCode: 16,
     });
-    expect(registryErrorFromHostError({ contractCode: 13 })).toMatchObject({
+    expect(registryErrorFromHostError({ contractCode: 17 })).toMatchObject({
       code: 'SERVICE_COUNT_STORAGE_CORRUPTED',
-      registryErrorCode: 13,
+      registryErrorCode: 17,
     });
   });
 
