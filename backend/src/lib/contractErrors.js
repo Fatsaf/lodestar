@@ -12,6 +12,10 @@ export const REGISTRY_ERROR_CODES = Object.freeze({
   9: { code: 'CATEGORY_INDEX_NOT_FOUND', message: 'Category index not found' },
   10: { code: 'INVALID_ENDPOINT', message: 'Service endpoint must be at most 256 characters' },
   11: { code: 'INVALID_CATEGORY', message: 'Service category must be a supported value of 1-32 characters' },
+  12: { code: 'REGISTRY_NOT_INITIALIZED', message: 'Registry contract has not been initialized' },
+  13: { code: 'REGISTRY_PAUSED', message: 'Registry contract is paused' },
+  14: { code: 'REGISTRY_COUNT_OVERFLOW', message: 'Service count exceeds the maximum supported value' },
+  15: { code: 'REGISTRY_STORAGE_CORRUPTED', message: 'Registry storage could not be read consistently' },
 });
 
 const REGISTRY_ERROR_PATTERNS = [

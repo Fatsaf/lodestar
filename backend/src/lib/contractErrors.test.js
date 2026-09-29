@@ -9,7 +9,7 @@ import {
 
 describe('registry contract error mapping', () => {
   it('documents every registry contract error code', () => {
-    expect(Object.keys(REGISTRY_ERROR_CODES).map(Number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+    expect(Object.keys(REGISTRY_ERROR_CODES).map(Number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
   });
 
   it('maps numeric registry codes to API ContractError objects', () => {
@@ -21,6 +21,23 @@ describe('registry contract error mapping', () => {
     });
   });
 
+  it('maps the get_service_count failure causes to distinct variants', () => {
+    const expected = [
+      [12, 'SERVICE_COUNT_OVERVIEW', 'Service count exceeds the maximum supported value'],
+      [13, 'SERVICE_COUNT_STORAGE_CORRUPTED', 'Service count storage is corrupted'],
+    ];
+
+    for (const [code, name, message] of expected) {
+      expect(REGISTRY_ERROR_CODES[code]).toMatchObject({ name, message });
+      expect(registryErrorFromCode(code)).toMatchObject({
+        name: 'ContractError',
+        code: name,
+        message,
+        registryErrorCode: code,
+      });
+    }
+  });
+
   it('extracts registry codes from structured RPC payloads', () => {
     expect(extractRegistryErrorCode({ errorResult: { contractCode: 7 } })).toBe(7);
     expect(extractRegistryErrorCode({ diagnosticEvents: [{ errorCode: 8 }] })).toBe(8);
@@ -29,6 +46,17 @@ describe('registry contract error mapping', () => {
   it('extracts registry codes from Soroban contract error strings without matching messages', () => {
     expect(extractRegistryErrorCode('HostError: Error(Contract, #4)')).toBe(4);
     expect(extractRegistryErrorCode('transaction failed with ContractError(6)')).toBe(6);
+  });
+
+  it('extracts the get_service_count failure variants from host errors', () => {
+    expect(registryErrorFromHostError({ contractCode: 12 })).toMatchObject({
+      code: 'SERVICE_COUNT_OVERVIEW',
+      registryErrorCode: 12,
+    });
+    expect(registryErrorFromHostError({ contractCode: 13 })).toMatchObject({
+      code: 'SERVICE_COUNT_STORAGE_CORRUPTED',
+      registryErrorCode: 13,
+    });
   });
 
   it('ignores unknown numeric codes', () => {

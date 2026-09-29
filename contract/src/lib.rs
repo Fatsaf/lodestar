@@ -30,6 +30,7 @@ pub enum RegistryError {
     CategoryIndexNotFound = 9,
     InvalidEndpoint = 10,
     InvalidCategory = 11,
+    ServiceCounterNotFound = 12,
 }
 
 // Canonical category list. Keep in sync with `frontend/lib/categoryMeta.tsx`.
